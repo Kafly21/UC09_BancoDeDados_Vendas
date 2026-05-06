@@ -66,3 +66,15 @@ END //
 CREATE PROCEDURE sp_reajustar_precos_categoria(
 	IN p_cd_categoria INT,
     IN p_percentual DECIMAL(5,2) -- Exemplo: 10.00 para 10%
+)
+BEGIN
+	DECLARE v_fator_multiplicacao DECIMAL(10,4);
+	-- Se informarem 10%, a conta fica: 1 + (10/100) = 1.10
+	SET v_fator_multiplicacao = 1 + (p_percentual / 100);
+
+	UPDATE tb_produto
+	SET vl_preco_venda = vl_preco_venda * v_fator_multiplicacao
+		WHERE cd_categoria = p_cd_categoria;
+END //
+
+DELIMITER ;
